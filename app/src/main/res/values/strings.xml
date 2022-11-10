@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TunisanGoldenLeague</string>
+    <string name="championnatSenior"><u>Championnat Senior</u></string>
+    <string name="championnatJunior"><u>Championnat Junior</u></string>
 </resources>
