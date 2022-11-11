@@ -3,9 +3,12 @@ package com.example.tunisangoldenleague.model
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.Serializable
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
 import java.util.*
 
@@ -22,32 +25,30 @@ data class Match(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun parseString(date: String): LocalDateTime {
-        return LocalDateTime.parse(
-            date,
-            DateTimeFormatter.
-        )
+    fun parseString(date: String): ZonedDateTime {
+        return ZonedDateTime.parse(date).withZoneSameInstant(ZoneId.of("Africa/Tunis"))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMatchDate(): String {
-        return "${parseString(startDate)?.dayOfMonth} ${parseString(startDate)?.month} ${parseString(startDate)?.year}"
+        return "${parseString(startDate)?.dayOfMonth} ${parseString(startDate)?.month?.getDisplayName(TextStyle.FULL,Locale.FRANCE)} ${parseString(startDate)?.year}"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMatchTime(): String {
-        return parseString(startDate)?.toLocalTime().toString()
+        return parseString(startDate)?.toLocalTime().toString().substringBeforeLast(":")
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getElapsedTime(): String {
-        if (parseString(endDate) < LocalDateTime.now())
+        val zoneId = ZoneId.of("Africa/Tunis")
+        val now = ZonedDateTime.now(zoneId)
+        if (parseString(endDate) < now)
             return "Match Terminé"
         else {
-            var minutes = ChronoUnit.MINUTES.between(parseString(startDate), LocalDateTime.now()) % 60
-            var hours = ChronoUnit.HOURS.between(parseString(startDate), LocalDateTime.now()) + ChronoUnit.MINUTES.between(parseString(startDate), LocalDateTime.now()) /60
-            return "Temps Ecoulé : ${hours}h${minutes}mnt"
+            val duration = Duration.between(parseString(startDate),now)
+            return "Temps Écoulé : ${duration.toMinutes().toString()} Minutes"
         }
     }
 }
