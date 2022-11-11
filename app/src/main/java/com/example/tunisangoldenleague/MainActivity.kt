@@ -3,16 +3,26 @@ package com.example.tunisangoldenleague
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tunisangoldenleague.adapters.MatchesAdapter
+import com.example.tunisangoldenleague.api.BackendAPI
+import com.example.tunisangoldenleague.api.RetrofitHelper
 import com.example.tunisangoldenleague.enum.DivisionEnum
 import com.example.tunisangoldenleague.model.Match
 import com.example.tunisangoldenleague.model.Team
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.awaitResponse
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,105 +41,196 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var teams = arrayListOf<Team>(
-            Team("Club Africain", "ca", "Tunisia First League", 0),
-            Team("Esperance", "est", "Tunisia First League", 0),
-            Team("Shell", "shell", "Tunisia Golden League", 0),
-            Team("Tunisair", "tunisair", "Tunisia Golden League", 0),
-            Team("Club Africain", "ca", "Tunisia Golden League +35", 0),
-            Team("Esperance", "est", "Tunisia Golden League +35", 0),
-        )
-        var matches = arrayListOf<Match>(
-            Match(
-                teams[0],
-                teams[1],
-                4,
-                0,
-                LocalDateTime.of(2022, 8, 10, 11, 30),
-                LocalDateTime.of(2022, 8, 10, 13, 0)
-            ),
-            Match(
-                teams[2],
-                teams[3],
-                2,
-                2,
-                LocalDateTime.of(2022, 10, 16, 15, 30),
-                LocalDateTime.of(2022, 10, 16, 17, 0)
-            ),
-            Match(
-                teams[4],
-                teams[5],
-                2,
-                2,
-                LocalDateTime.of(2022, 10, 16, 15, 30),
-                LocalDateTime.of(2022, 10, 16, 17, 0)
-            )
-        )
-        var tglMatchesAdapter = MatchesAdapter(matches)
-        var tglP35MatchesAdapter = MatchesAdapter(matches)
-        var tflMatchesAdapter = MatchesAdapter(matches)
-        var liveMatchesAdapter = MatchesAdapter(matches)
+        var liveMatches = ArrayList<Match>()
+        var tglP35Matches = ArrayList<Match>()
+        var tglMatches = ArrayList<Match>()
+        var tflMatches = ArrayList<Match>()
+        val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
+        val liveMatchesCall = backendApi.getLiveMatches() as Call<ArrayList<Match>?>?
+        val tglMatchesCall = backendApi.getMatchesByLeague("Tunisia Golden League")as Call<ArrayList<Match>?>?
+        val tglP35MatchesCall = backendApi.getMatchesByLeague("Tunisia Golden League P35") as Call<ArrayList<Match>?>?
+        val tflMatchesCall = backendApi.getMatchesByLeague("Tunisia First League") as Call<ArrayList<Match>?>?
+        live = findViewById(R.id.imageView0)
         liveMatchesList = findViewById(R.id.recyclerView0)
         tglP35MatchesList = findViewById(R.id.recyclerView)
         tglMatchesList = findViewById(R.id.recyclerView1)
         tflMatchesList = findViewById(R.id.recyclerView2)
-        tglMatchesList.adapter = tglMatchesAdapter
-        tglP35MatchesList.adapter = tglP35MatchesAdapter
-        tflMatchesList.adapter = tflMatchesAdapter
-        liveMatchesList.adapter = liveMatchesAdapter
-        tglP35MatchesList.setLayoutManager(
-            LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-        )
-        tglMatchesList.setLayoutManager(
-            LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-        )
-        tflMatchesList.setLayoutManager(
-            LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-        )
-        liveMatchesList.setLayoutManager(
-            LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-        )
-        live = findViewById(R.id.imageView0)
         tglP35 = findViewById(R.id.textView)
         tgl = findViewById(R.id.textView1)
         tfl = findViewById(R.id.textView2)
-        tglP35.setOnClickListener {
-            var intent = Intent(this@MainActivity, Leaderboard::class.java)
-            intent.putExtra("title", "Tunisia Golden League +35")
-            intent.putExtra("teams", teams)
-            intent.putExtra("matches", matches)
-            startActivity(intent)
+        liveMatchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Match>?>,
+                response: Response<ArrayList<Match>?>
+            ) {
+                if (response.isSuccessful) {
+                    liveMatches = response.body()!!
+                    Log.d("azer",liveMatches.toString())
+                    var liveMatchesAdapter = MatchesAdapter(liveMatches)
+                    liveMatchesList.adapter = liveMatchesAdapter
+                    liveMatchesList.setLayoutManager(
+                        LinearLayoutManager(
+                            this@MainActivity,
+                            LinearLayoutManager.HORIZONTAL, false
+                        )
+                    )
+                    live.setOnClickListener {
+                        var intent = Intent(this@MainActivity, LiveMatches::class.java)
+                        intent.putExtra("matches", liveMatches)
+                        startActivity(intent)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        tglP35MatchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Match>?>,
+                response: Response<ArrayList<Match>?>
+            ) {
+                if (response.isSuccessful) {
+                    tglP35Matches = response.body()!!
+                    var tglP35MatchesAdapter = MatchesAdapter(tglP35Matches)
+                    tglP35MatchesList.adapter = tglP35MatchesAdapter
+                    tglP35MatchesList.setLayoutManager(
+                        LinearLayoutManager(
+                            this@MainActivity,
+                            LinearLayoutManager.HORIZONTAL, false
+                        )
+                    )
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        tglMatchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Match>?>,
+                response: Response<ArrayList<Match>?>
+            ) {
+                if (response.isSuccessful) {
+                    tglMatches = response.body()!!
+                    var tglMatchesAdapter = MatchesAdapter(tglMatches)
+                    tglMatchesList.adapter = tglMatchesAdapter
+                    tglMatchesList.setLayoutManager(
+                        LinearLayoutManager(
+                            this@MainActivity,
+                            LinearLayoutManager.HORIZONTAL, false
+                        )
+                    )
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        tflMatchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Match>?>,
+                response: Response<ArrayList<Match>?>
+            ) {
+                if (response.isSuccessful) {
+                    tflMatches = response.body()!!
+                    var tflMatchesAdapter = MatchesAdapter(tflMatches)
+                    tflMatchesList.adapter = tflMatchesAdapter
+                    tflMatchesList.setLayoutManager(
+                        LinearLayoutManager(
+                            this@MainActivity,
+                            LinearLayoutManager.HORIZONTAL, false
+                        )
+                    )
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+
+        val tglTeamsCall = backendApi.getTeamsByLeague("Tunisia Golden League")as Call<ArrayList<Team>?>?
+        val tflTeamsCall = backendApi.getTeamsByLeague("Tunisia First League") as Call<ArrayList<Team>?>?
+        val tglP35TeamsCall = backendApi.getTeamsByLeague("Tunisia Golden League P35") as Call<ArrayList<Team>?>?
+        var tglTeams: ArrayList<Team>
+        var tglP35Teams: ArrayList<Team>
+        var tflTeams: ArrayList<Team>
+        tglTeamsCall!!.enqueue(object : Callback<ArrayList<Team>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Team>?>,
+                response: Response<ArrayList<Team>?>
+            ) {
+                if (response.isSuccessful) {
+                    tglTeams = response.body()!!
+                    tglTeams.sortByDescending { team -> team.points }
+                    tgl.setOnClickListener {
+                        var intent = Intent(this@MainActivity, Leaderboard::class.java)
+                        intent.putExtra("title", "Tunisia Golden League")
+                        intent.putExtra("teams", tglTeams)
+                        intent.putExtra("matches", tglMatches)
+                        startActivity(intent)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        tglP35TeamsCall!!.enqueue(object : Callback<ArrayList<Team>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Team>?>,
+                response: Response<ArrayList<Team>?>
+            ) {
+                if (response.isSuccessful) {
+                    tglP35Teams = response.body()!!
+                    tglP35Teams.sortByDescending { team -> team.points }
+                    tglP35.setOnClickListener {
+                        var intent = Intent(this@MainActivity, Leaderboard::class.java)
+                        intent.putExtra("title", "Tunisia Golden League +35")
+                        intent.putExtra("teams", tglP35Teams)
+                        intent.putExtra("matches", tglP35Matches)
+                        startActivity(intent)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        tflTeamsCall!!.enqueue(object : Callback<ArrayList<Team>?> {
+            override fun onResponse(
+                call: Call<ArrayList<Team>?>,
+                response: Response<ArrayList<Team>?>
+            ) {
+                if (response.isSuccessful) {
+                    tflTeams = response.body()!!
+                    tflTeams.sortByDescending { team -> team.points }
+                    tfl.setOnClickListener {
+                        var intent = Intent(this@MainActivity, Leaderboard::class.java)
+                        intent.putExtra("title", "Tunisia First League")
+                        intent.putExtra("teams", tflTeams)
+                        intent.putExtra("matches", tflMatches)
+                        startActivity(intent)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
+                // displaying an error message in toast
+                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
         }
-        tgl.setOnClickListener {
-            var intent = Intent(this@MainActivity, Leaderboard::class.java)
-            intent.putExtra("title", "Tunisia Golden League")
-            intent.putExtra("teams", teams)
-            intent.putExtra("matches", matches)
-            startActivity(intent)
-        }
-        tfl.setOnClickListener {
-            var intent = Intent(this@MainActivity, Leaderboard::class.java)
-            intent.putExtra("title", "Tunisia First League")
-            intent.putExtra("teams", teams)
-            intent.putExtra("matches", matches)
-            startActivity(intent)
-        }
-        live.setOnClickListener {
-            var intent = Intent(this@MainActivity, LiveMatches::class.java)
-            intent.putExtra("matches", matches)
-            startActivity(intent)
-        }
-    }
 }

@@ -8,14 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tunisangoldenleague.MatchDetails
 import com.example.tunisangoldenleague.R
-import com.example.tunisangoldenleague.enum.DivisionEnum
 import com.example.tunisangoldenleague.model.Match
+import com.squareup.picasso.Picasso
 
 
-    class MatchDetailsAdapter(var matches: ArrayList<Match>) :
+class MatchDetailsAdapter(var matches: ArrayList<Match>) :
         RecyclerView.Adapter<MatchDetailsAdapter.ViewHolder>() {
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val date : TextView = itemView.findViewById(R.id.textView5)
@@ -53,10 +54,10 @@ import com.example.tunisangoldenleague.model.Match
             date.setText(match.getMatchDate())
             time.setText(match.getMatchTime())
             score.setText(match.getScore())
-            var homeID = viewHolder.itemView.context.resources.getIdentifier(match.homeTeam.logo,"drawable",viewHolder.itemView.context.packageName)
-            var awayID = viewHolder.itemView.context.resources.getIdentifier(match.awayTeam.logo,"drawable",viewHolder.itemView.context.packageName)
-            homeTeamLogo.setImageResource(homeID)
-            awayTeamLogo.setImageResource(awayID)
+            var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.homeTeam.image}"
+            var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.awayTeam.image}"
+            Picasso.get().load(homeTeamUrl).into(homeTeamLogo)
+            Picasso.get().load(awayTeamUrl).into(awayTeamLogo)
             viewHolder.itemView.setOnClickListener{
                 val intent = Intent(viewHolder.itemView.context, MatchDetails::class.java)
                 intent.putExtra("title",match.awayTeam.league)

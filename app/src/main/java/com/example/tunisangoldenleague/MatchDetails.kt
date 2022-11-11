@@ -3,12 +3,11 @@ package com.example.tunisangoldenleague
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.example.tunisangoldenleague.model.Match
-import com.example.tunisangoldenleague.model.Team
+import com.squareup.picasso.Picasso
 
 class MatchDetails : AppCompatActivity() {
     lateinit var backArrow : ImageView
@@ -40,8 +39,10 @@ class MatchDetails : AppCompatActivity() {
         homeTeam.setText(match.homeTeam.name)
         awayTeam.setText(match.awayTeam.name)
         score.setText(match.getScore())
-        homeLogo.setImageResource(this.resources.getIdentifier(match.homeTeam.logo,"drawable",this.packageName))
-        awayLogo.setImageResource(this.resources.getIdentifier(match.awayTeam.logo,"drawable",this.packageName))
+        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.homeTeam.image}"
+        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.awayTeam.image}"
+        Picasso.get().load(homeTeamUrl).into(homeLogo)
+        Picasso.get().load(awayTeamUrl).into(awayLogo)
         backArrow.setOnClickListener{
             finish()
         }
