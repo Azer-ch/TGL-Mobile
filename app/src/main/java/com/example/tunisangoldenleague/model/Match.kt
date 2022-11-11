@@ -4,13 +4,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
-class Match (
+class Match(
     var homeTeam: Team,
     var awayTeam: Team,
     var homeTeamScore: Int,
     var awayTeamScore: Int,
-    var date: LocalDateTime
+    var startDate: LocalDateTime,
+    var endDate: LocalDateTime
 ) : Serializable {
     init {
         if (homeTeamScore > awayTeamScore) {
@@ -22,15 +24,29 @@ class Match (
             awayTeam.points++
         }
     }
-    fun getScore():String{
+
+    fun getScore(): String {
         return "$homeTeamScore - $awayTeamScore"
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getMatchDate():String{
-        return "${date.dayOfMonth} ${date.month} ${date.year}"
+    fun getMatchDate(): String {
+        return "${startDate.dayOfMonth} ${startDate.month} ${startDate.year}"
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getMatchTime():String{
-        return "${date.hour.toString()}:${date.minute.toString()}"
+    fun getMatchTime(): String {
+        return "${startDate.hour.toString()}:${startDate.minute.toString()}"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getElapsedTime(): String {
+        if (endDate < LocalDateTime.now())
+            return "Match Terminé"
+        else {
+            var minutes = ChronoUnit.MINUTES.between(startDate, LocalDateTime.now())
+            var hours = ChronoUnit.HOURS.between(startDate, LocalDateTime.now())
+            return "Temps Ecoulé : ${hours}h${minutes}mnt"
+        }
     }
 }

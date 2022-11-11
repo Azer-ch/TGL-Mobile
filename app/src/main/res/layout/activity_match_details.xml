@@ -24,7 +24,7 @@
         android:layout_marginEnd="10dp"
         android:text="Championnat Junior"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/backArrow"
         app:layout_constraintStart_toEndOf="@+id/backArrow"
         app:layout_constraintTop_toTopOf="@id/backArrow"

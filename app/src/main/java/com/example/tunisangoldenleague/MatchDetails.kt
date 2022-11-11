@@ -34,7 +34,7 @@ class MatchDetails : AppCompatActivity() {
         score = findViewById(R.id.textView8)
         awayTeam = findViewById(R.id.textView9)
         awayLogo = findViewById(R.id.awayLogo)
-        title.setText(intent.getStringExtra("championnant"))
+        title.setText(intent.getStringExtra("title"))
         date.setText(match.getMatchDate())
         time.setText(match.getMatchTime())
         homeTeam.setText(match.homeTeam.name)

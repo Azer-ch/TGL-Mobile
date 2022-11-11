@@ -59,10 +59,7 @@ import com.example.tunisangoldenleague.model.Match
             awayTeamLogo.setImageResource(awayID)
             viewHolder.itemView.setOnClickListener{
                 val intent = Intent(viewHolder.itemView.context, MatchDetails::class.java)
-                if(match.awayTeam.division == DivisionEnum.JUNIOR)
-                    intent.putExtra("championnant","Championnant Junior")
-                else
-                    intent.putExtra("championnant","championnant Senior")
+                intent.putExtra("title",match.awayTeam.league)
                 intent.putExtra("match",match)
                 viewHolder.itemView.context.startActivity(intent)
             }

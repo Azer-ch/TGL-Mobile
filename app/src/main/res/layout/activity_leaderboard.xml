@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/black"
     style="@style/goldenScroll">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
         tools:context=".MatchDetails">
 
         <ImageView
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="Championnat Junior"
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/backArrow"
             app:layout_constraintStart_toEndOf="@+id/backArrow"
             app:layout_constraintTop_toTopOf="@id/backArrow"
@@ -109,7 +109,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

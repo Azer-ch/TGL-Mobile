@@ -1,20 +1,23 @@
 package com.example.tunisangoldenleague.adapters
 
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tunisangoldenleague.MatchDetails
 import com.example.tunisangoldenleague.R
 import com.example.tunisangoldenleague.enum.DivisionEnum
 import com.example.tunisangoldenleague.model.Match
 
-class MatchesAdapter(var matches: ArrayList<Match>) :
-    RecyclerView.Adapter<MatchesAdapter.ViewHolder>() {
+class LiveMatchesAdapter(var matches: ArrayList<Match>) :
+    RecyclerView.Adapter<LiveMatchesAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val elapsedTime: TextView = itemView.findViewById(R.id.textView0)
         val homeTeamName : TextView = itemView.findViewById(R.id.textView1)
         val awayTeamName : TextView = itemView.findViewById(R.id.textView3)
         val homeTeamLogo : ImageView = itemView.findViewById(R.id.imageView1)
@@ -26,22 +29,25 @@ class MatchesAdapter(var matches: ArrayList<Match>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MatchesAdapter.ViewHolder {
+    ): LiveMatchesAdapter.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
-        val contactView = inflater.inflate(R.layout.match_list_item, parent, false)
+        val contactView = inflater.inflate(R.layout.live_match_list_item, parent, false)
         return ViewHolder(contactView)
     }
 
-    override fun onBindViewHolder(viewHolder: MatchesAdapter.ViewHolder, position: Int) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onBindViewHolder(viewHolder: LiveMatchesAdapter.ViewHolder, position: Int) {
         val match: Match = matches.get(position)
         val homeTeamName = viewHolder.homeTeamName
         val awayTeamName = viewHolder.awayTeamName
         val homeTeamLogo = viewHolder.homeTeamLogo
         val awayTeamLogo = viewHolder.awayTeamLogo
         val score = viewHolder.score
+        val elapsedTime = viewHolder.elapsedTime
         homeTeamName.setText(match.homeTeam.name)
         awayTeamName.setText(match.awayTeam.name)
+        elapsedTime.setText(match.getElapsedTime())
         score.setText(match.getScore())
         var homeID = viewHolder.itemView.context.resources.getIdentifier(match.homeTeam.logo,"drawable",viewHolder.itemView.context.packageName)
         var awayID = viewHolder.itemView.context.resources.getIdentifier(match.awayTeam.logo,"drawable",viewHolder.itemView.context.packageName)

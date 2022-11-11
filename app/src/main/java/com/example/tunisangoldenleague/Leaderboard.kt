@@ -21,8 +21,7 @@ class Leaderboard : AppCompatActivity() {
         setContentView(R.layout.activity_leaderboard)
         var teams = intent.getSerializableExtra("teams") as ArrayList<Team>
         var matches = intent.getSerializableExtra("matches") as ArrayList<Match>
-        matches.forEach { team -> println(team.date) }
-        var division = intent.getStringExtra("division")
+        var division = intent.getStringExtra("title")
         backArrow = findViewById(R.id.backArrow)
         leaderboardRecyclerView = findViewById(R.id.recyclerView)
         matchDetailsRecyclerView = findViewById(R.id.recyclerView2)
