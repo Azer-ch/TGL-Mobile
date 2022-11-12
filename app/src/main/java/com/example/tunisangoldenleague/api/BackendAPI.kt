@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface BackendAPI {
     @GET("leagues")
-    suspend fun  getLeagues(): Response<ArrayList<League>>
+    fun  getLeagues(): Call<ArrayList<League>>
     @GET("teams?")
     fun getTeamsByLeague(@Query("league") league: String): Call<ArrayList<Team>>
 
