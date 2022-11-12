@@ -5,7 +5,7 @@
     style="@style/goldenScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@drawable/logo">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/imageView0"
                 android:layout_width="40dp"
@@ -34,6 +35,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/live"
                 />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"
+                android:layout_marginStart="10dp"
+                android:text="@string/no_matches"
+                android:textColor="@color/golden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView0" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView0"
                 style="@style/scrollbar_shape_style"
@@ -73,6 +86,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"
+                android:layout_marginStart="10dp"
+                android:text="@string/no_matches"
+                android:textColor="@color/golden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 style="@style/scrollbar_shape_style"
@@ -113,6 +137,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:text="@string/no_matches"
+                android:textColor="@color/golden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView1" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView1"
                 style="@style/scrollbar_shape_style"
@@ -155,6 +190,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:text="@string/no_matches"
+                android:textColor="@color/golden"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView2" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
                 android:layout_width="match_parent"

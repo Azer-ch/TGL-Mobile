@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -45,11 +46,15 @@ class MainActivity : AppCompatActivity() {
         var tglP35Matches = ArrayList<Match>()
         var tglMatches = ArrayList<Match>()
         var tflMatches = ArrayList<Match>()
+        var textViews = ArrayList<TextView>()
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
         val liveMatchesCall = backendApi.getLiveMatches() as Call<ArrayList<Match>?>?
-        val tglMatchesCall = backendApi.getMatchesByLeague("Tunisia Golden League")as Call<ArrayList<Match>?>?
-        val tglP35MatchesCall = backendApi.getMatchesByLeague("Tunisia Golden League P35") as Call<ArrayList<Match>?>?
-        val tflMatchesCall = backendApi.getMatchesByLeague("Tunisia First League") as Call<ArrayList<Match>?>?
+        val tglMatchesCall =
+            backendApi.getMatchesByLeague("Tunisia Golden League") as Call<ArrayList<Match>?>?
+        val tglP35MatchesCall =
+            backendApi.getMatchesByLeague("Tunisia Golden League P35") as Call<ArrayList<Match>?>?
+        val tflMatchesCall =
+            backendApi.getMatchesByLeague("Tunisia First League") as Call<ArrayList<Match>?>?
         live = findViewById(R.id.imageView0)
         liveMatchesList = findViewById(R.id.recyclerView0)
         tglP35MatchesList = findViewById(R.id.recyclerView)
@@ -58,6 +63,10 @@ class MainActivity : AppCompatActivity() {
         tglP35 = findViewById(R.id.textView)
         tgl = findViewById(R.id.textView1)
         tfl = findViewById(R.id.textView2)
+        textViews.add(findViewById(R.id.textView14))
+        textViews.add(findViewById(R.id.textView15))
+        textViews.add(findViewById(R.id.textView16))
+        textViews.add(findViewById(R.id.textView17))
         liveMatchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
             override fun onResponse(
                 call: Call<ArrayList<Match>?>,
@@ -65,15 +74,17 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     liveMatches = response.body()!!
-                    Log.d("azer",liveMatches.toString())
-                    var liveMatchesAdapter = MatchesAdapter(liveMatches)
-                    liveMatchesList.adapter = liveMatchesAdapter
-                    liveMatchesList.setLayoutManager(
-                        LinearLayoutManager(
-                            this@MainActivity,
-                            LinearLayoutManager.HORIZONTAL, false
+                    if (!liveMatches.isEmpty()) {
+                        textViews[0].visibility = View.INVISIBLE
+                        var liveMatchesAdapter = MatchesAdapter(liveMatches)
+                        liveMatchesList.adapter = liveMatchesAdapter
+                        liveMatchesList.setLayoutManager(
+                            LinearLayoutManager(
+                                this@MainActivity,
+                                LinearLayoutManager.HORIZONTAL, false
+                            )
                         )
-                    )
+                    }
                     live.setOnClickListener {
                         var intent = Intent(this@MainActivity, LiveMatches::class.java)
                         intent.putExtra("matches", liveMatches)
@@ -81,9 +92,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
-                // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -94,19 +105,23 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     tglP35Matches = response.body()!!
-                    var tglP35MatchesAdapter = MatchesAdapter(tglP35Matches)
-                    tglP35MatchesList.adapter = tglP35MatchesAdapter
-                    tglP35MatchesList.setLayoutManager(
-                        LinearLayoutManager(
-                            this@MainActivity,
-                            LinearLayoutManager.HORIZONTAL, false
+                    if (!tglP35Matches.isEmpty()) {
+                        textViews[1].visibility = View.INVISIBLE
+                        var tglP35MatchesAdapter = MatchesAdapter(tglP35Matches)
+                        tglP35MatchesList.adapter = tglP35MatchesAdapter
+                        tglP35MatchesList.setLayoutManager(
+                            LinearLayoutManager(
+                                this@MainActivity,
+                                LinearLayoutManager.HORIZONTAL, false
+                            )
                         )
-                    )
+                    }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -117,19 +132,23 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     tglMatches = response.body()!!
-                    var tglMatchesAdapter = MatchesAdapter(tglMatches)
-                    tglMatchesList.adapter = tglMatchesAdapter
-                    tglMatchesList.setLayoutManager(
-                        LinearLayoutManager(
-                            this@MainActivity,
-                            LinearLayoutManager.HORIZONTAL, false
+                    if (!tglMatches.isEmpty()) {
+                        textViews[2].visibility = View.INVISIBLE
+                        var tglMatchesAdapter = MatchesAdapter(tglMatches)
+                        tglMatchesList.adapter = tglMatchesAdapter
+                        tglMatchesList.setLayoutManager(
+                            LinearLayoutManager(
+                                this@MainActivity,
+                                LinearLayoutManager.HORIZONTAL, false
+                            )
                         )
-                    )
+                    }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -140,26 +159,33 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     tflMatches = response.body()!!
-                    var tflMatchesAdapter = MatchesAdapter(tflMatches)
-                    tflMatchesList.adapter = tflMatchesAdapter
-                    tflMatchesList.setLayoutManager(
-                        LinearLayoutManager(
-                            this@MainActivity,
-                            LinearLayoutManager.HORIZONTAL, false
+                    if (!tflMatches.isEmpty()) {
+                        textViews[3].visibility = View.INVISIBLE
+                        var tflMatchesAdapter = MatchesAdapter(tflMatches)
+                        tflMatchesList.adapter = tflMatchesAdapter
+                        tflMatchesList.setLayoutManager(
+                            LinearLayoutManager(
+                                this@MainActivity,
+                                LinearLayoutManager.HORIZONTAL, false
+                            )
                         )
-                    )
+                    }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
 
-        val tglTeamsCall = backendApi.getTeamsByLeague("Tunisia Golden League")as Call<ArrayList<Team>?>?
-        val tflTeamsCall = backendApi.getTeamsByLeague("Tunisia First League") as Call<ArrayList<Team>?>?
-        val tglP35TeamsCall = backendApi.getTeamsByLeague("Tunisia Golden League P35") as Call<ArrayList<Team>?>?
+        val tglTeamsCall =
+            backendApi.getTeamsByLeague("Tunisia Golden League") as Call<ArrayList<Team>?>?
+        val tflTeamsCall =
+            backendApi.getTeamsByLeague("Tunisia First League") as Call<ArrayList<Team>?>?
+        val tglP35TeamsCall =
+            backendApi.getTeamsByLeague("Tunisia Golden League P35") as Call<ArrayList<Team>?>?
         var tglTeams: ArrayList<Team>
         var tglP35Teams: ArrayList<Team>
         var tflTeams: ArrayList<Team>
@@ -180,9 +206,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -203,9 +230,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -226,11 +254,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
                 // displaying an error message in toast
-                Toast.makeText(this@MainActivity, "Fail to get the data..", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
-        }
+    }
 }
