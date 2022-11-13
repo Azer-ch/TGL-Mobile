@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">TunisanGoldenLeague</string>
-    <string name="championnatSenior"><u>Championnat Senior</u></string>
-    <string name="championnatJunior"><u>Championnat Junior</u></string>
+    <string name="app_name">Tunisian Golden League+</string>
     <string name="no_matches">Pas de matches!</string>
 </resources>
