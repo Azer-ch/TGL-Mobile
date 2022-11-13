@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity() {
                                 ) {
                                     Toast.makeText(
                                         this@MainActivity,
-                                        "Problème Serveur...",
+                                        "Problème de connection...",
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
@@ -192,7 +192,7 @@ class MainActivity : AppCompatActivity() {
                                 override fun onFailure(call: Call<ArrayList<Team>?>, t: Throwable) {
                                     Toast.makeText(
                                         this@MainActivity,
-                                        "Problème Serveur...",
+                                        "Problème de connection...",
                                         Toast.LENGTH_SHORT
                                     )
                                         .show()
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<League>?>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème de connection...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
@@ -238,7 +238,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Problème Serveur...", Toast.LENGTH_SHORT)
+                Toast.makeText(this@MainActivity, "Problème de connection...", Toast.LENGTH_SHORT)
                     .show()
             }
         })
