@@ -51,8 +51,8 @@ class LiveMatchesAdapter(var matches: ArrayList<Match>) :
         awayTeamName.setText(match.awayTeam.name)
         elapsedTime.setText(match.getElapsedTime())
         score.setText(match.getScore())
-        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.homeTeam.image}"
-        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.awayTeam.image}"
+        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
+        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
         Picasso.get().load(homeTeamUrl).into(homeTeamLogo)
         Picasso.get().load(awayTeamUrl).into(awayTeamLogo)
         viewHolder.itemView.setOnClickListener{

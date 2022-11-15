@@ -57,6 +57,7 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/dark_grey"
                 app:layout_constraintStart_toStartOf="@id/constraintLayout1"
                 app:layout_constraintTop_toTopOf="@id/constraintLayout1"
                 />

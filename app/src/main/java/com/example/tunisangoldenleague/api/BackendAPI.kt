@@ -1,5 +1,6 @@
 package com.example.tunisangoldenleague.api
 
+import com.example.tunisangoldenleague.model.Event
 import com.example.tunisangoldenleague.model.League
 import com.example.tunisangoldenleague.model.Match
 import com.example.tunisangoldenleague.model.Team
@@ -22,4 +23,6 @@ interface BackendAPI {
 
     @GET("live")
     fun getLiveMatches(): Call<ArrayList<Match>>
+    @GET("comments?")
+    fun getEventsByMatch(@Query("game") game : String) : Call<ArrayList<Event>>
 }

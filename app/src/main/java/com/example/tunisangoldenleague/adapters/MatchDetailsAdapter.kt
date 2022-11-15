@@ -54,8 +54,8 @@ class MatchDetailsAdapter(var matches: ArrayList<Match>) :
             date.setText(match.getMatchDate())
             time.setText(match.getMatchTime())
             score.setText(match.getScore())
-            var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.homeTeam.image}"
-            var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com/${match.awayTeam.image}"
+            var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
+            var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
             Picasso.get().load(homeTeamUrl).into(homeTeamLogo)
             Picasso.get().load(awayTeamUrl).into(awayTeamLogo)
             viewHolder.itemView.setOnClickListener{

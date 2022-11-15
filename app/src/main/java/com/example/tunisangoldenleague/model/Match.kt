@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 data class Match(
+    var id : String,
     var homeTeam: Team,
     var awayTeam: Team,
     var homeTeamScore: Int,
