@@ -69,7 +69,7 @@ class MatchDetails : AppCompatActivity() {
         }
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
         val eventsCall = backendApi.getEventsByMatch(match.id)
-        var events = ArrayList<Event>()
+        var events: ArrayList<Event>
         eventsCall!!.enqueue(object : Callback<ArrayList<Event>?> {
             override fun onResponse(
                 call: Call<ArrayList<Event>?>,

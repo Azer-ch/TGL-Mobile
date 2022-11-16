@@ -61,7 +61,7 @@ class TeamsAdapter(var teams: ArrayList<Team>) :
         points.setText(team.points.toString())
         viewHolder.itemView.setOnClickListener{
             val intent = Intent(viewHolder.itemView.context, TeamDetails::class.java)
-            intent.putExtra("team",team.name)
+            intent.putExtra("team",team)
             viewHolder.itemView.context.startActivity(intent)
         }
     }

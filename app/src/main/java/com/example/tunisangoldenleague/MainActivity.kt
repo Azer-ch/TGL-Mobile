@@ -170,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                                         matches = response.body()!!
                                         if (!matches.isEmpty()) {
                                             noMatchesTextView.visibility = View.INVISIBLE
+                                            recyclerView.visibility = View.VISIBLE
                                             var matchesAdapter = MatchesAdapter(matches)
                                             recyclerView.adapter = matchesAdapter
                                             recyclerView.setLayoutManager(
@@ -179,6 +180,10 @@ class MainActivity : AppCompatActivity() {
                                                 )
                                             )
                                         }
+                                    }
+                                    else{
+                                        noMatchesTextView.visibility = View.VISIBLE
+                                        recyclerView.visibility = View.INVISIBLE
                                     }
                                 }
 
@@ -226,12 +231,6 @@ class MainActivity : AppCompatActivity() {
                             })
                         }
                     }
-                    if(constraintLayouts[0].visibility == View.INVISIBLE && constraintLayouts.size > 1){
-                        var params =  constraintLayouts[1].layoutParams as LayoutParams
-                        params.topToTop = parentLayout.id
-                        params.startToStart = parentLayout.id
-                        constraintLayouts[1].requestLayout()
-                    }
                 }
             }
 
@@ -250,8 +249,10 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     liveMatches = response.body()!!
+                    Log.d("azer", liveMatches.toString())
                     if (!liveMatches.isEmpty()) {
                         liveTextView.visibility = View.INVISIBLE
+                        liveMatchesList.visibility = View.VISIBLE
                         var liveMatchesAdapter = MatchesAdapter(liveMatches)
                         liveMatchesList.adapter = liveMatchesAdapter
                         liveMatchesList.setLayoutManager(
@@ -264,6 +265,10 @@ class MainActivity : AppCompatActivity() {
                             var intent = Intent(this@MainActivity, LiveMatches::class.java)
                             startActivity(intent)
                         }
+                    }
+                    else{
+                        liveMatchesList.visibility = View.INVISIBLE
+                        liveTextView.visibility = View.VISIBLE
                     }
                 }
             }
