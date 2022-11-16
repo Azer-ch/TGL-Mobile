@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -76,6 +77,7 @@ class MatchDetails : AppCompatActivity() {
         time.setText(match.getMatchTime())
         homeTeam.setText(match.homeTeam.name)
         awayTeam.setText(match.awayTeam.name)
+        score.setText(match.getScore())
         var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
         var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
         Picasso.get().load(homeTeamUrl).into(homeLogo)
@@ -119,13 +121,14 @@ class MatchDetails : AppCompatActivity() {
             }
         })
         // get Match
-        /* val matchCall = backendApi.getMatchById(match.id)
+        val matchCall = backendApi.getMatchById(match.id)
          var updatedMatch: Match
          matchCall!!.enqueue(object : Callback<Match> {
              override fun onResponse(
                  call: Call<Match>,
                  response: Response<Match>
              ) {
+                 Log.d("azer",response.toString())
                  if (response.isSuccessful) {
                      updatedMatch = response.body()!!
                      score.setText(updatedMatch.getScore())
@@ -139,7 +142,6 @@ class MatchDetails : AppCompatActivity() {
                  )
                      .show()
              }
-         })*/
-        score.setText(match.getScore())
+         })
     }
 }

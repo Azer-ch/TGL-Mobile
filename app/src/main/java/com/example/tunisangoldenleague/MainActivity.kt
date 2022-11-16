@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -42,6 +43,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        parentLayout = findViewById(R.id.parent)
+        liveImageView = findViewById(R.id.imageView)
+        liveTextView = findViewById(R.id.textView)
+        liveMatchesList = findViewById(R.id.recyclerView)
+        liveMatchesContainer = findViewById(R.id.constraintLayout)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             init()
@@ -58,15 +64,18 @@ class MainActivity : AppCompatActivity() {
             r.displayMetrics
         ).toInt()
     }
+
     fun init() {
-        parentLayout = findViewById(R.id.parent)
-        liveImageView = findViewById(R.id.imageView)
-        liveTextView = findViewById(R.id.textView)
-        liveMatchesList = findViewById(R.id.recyclerView)
-        liveMatchesContainer = findViewById(R.id.constraintLayout)
+        parentLayout.children.forEach { view ->
+            run {
+                if (view.id != R.id.constraintLayout) {
+                    view.visibility = View.GONE
+                }
+            }
+        }
         var constraintLayouts = ArrayList<ConstraintLayout>()
         // Get Leagues
-        var leagues = ArrayList<League>()
+        var leagues: ArrayList<League>
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
         val leagueCall = backendApi.getLeagues()
         leagueCall!!.enqueue(object : Callback<ArrayList<League>?> {
@@ -99,7 +108,10 @@ class MainActivity : AppCompatActivity() {
                             if (i == leagues.size - 1) {
                                 layoutParam.bottomToBottom = parentLayout.id
                                 layoutParam.setMargins(
-                                    convertToPx(10), convertToPx(50), convertToPx(10), convertToPx(10)
+                                    convertToPx(10),
+                                    convertToPx(50),
+                                    convertToPx(10),
+                                    convertToPx(10)
                                 )
                             }
                             layout.requestLayout()
@@ -180,8 +192,7 @@ class MainActivity : AppCompatActivity() {
                                                 )
                                             )
                                         }
-                                    }
-                                    else{
+                                    } else {
                                         noMatchesTextView.visibility = View.VISIBLE
                                         recyclerView.visibility = View.INVISIBLE
                                     }
@@ -209,13 +220,18 @@ class MainActivity : AppCompatActivity() {
                                     if (response.isSuccessful) {
                                         teams = response.body()!!
                                         teams.sortByDescending { team -> team.points }
-                                        title.setOnClickListener {
-                                            var intent =
-                                                Intent(this@MainActivity, Leaderboard::class.java)
-                                            intent.putExtra("title", leagues[i].name)
-                                            intent.putExtra("teams", teams)
-                                            intent.putExtra("matches", matches)
-                                            startActivity(intent)
+                                        if (teams.size > 0) {
+                                            title.setOnClickListener {
+                                                var intent =
+                                                    Intent(
+                                                        this@MainActivity,
+                                                        Leaderboard::class.java
+                                                    )
+                                                intent.putExtra("title", leagues[i].name)
+                                                intent.putExtra("teams", teams)
+                                                intent.putExtra("matches", matches)
+                                                startActivity(intent)
+                                            }
                                         }
                                     }
                                 }
@@ -249,7 +265,6 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     liveMatches = response.body()!!
-                    Log.d("azer", liveMatches.toString())
                     if (!liveMatches.isEmpty()) {
                         liveTextView.visibility = View.INVISIBLE
                         liveMatchesList.visibility = View.VISIBLE
@@ -265,8 +280,7 @@ class MainActivity : AppCompatActivity() {
                             var intent = Intent(this@MainActivity, LiveMatches::class.java)
                             startActivity(intent)
                         }
-                    }
-                    else{
+                    } else {
                         liveMatchesList.visibility = View.INVISIBLE
                         liveTextView.visibility = View.VISIBLE
                     }
@@ -274,6 +288,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                liveMatchesList.visibility = View.INVISIBLE
+                liveTextView.visibility = View.VISIBLE
                 Toast.makeText(this@MainActivity, "Problème de connection...", Toast.LENGTH_SHORT)
                     .show()
             }

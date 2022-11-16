@@ -32,6 +32,6 @@ interface BackendAPI {
     @GET("games")
     fun getGamesByTeamId(@Query("team") team: String): Call<GamesDto>
 
-    @GET("game?")
-    fun getMatchById(@Query("team") team : String) : Call<Match>
+    @GET("game")
+    fun getMatchById(@Query("game") team : String) : Call<Match>
 }
