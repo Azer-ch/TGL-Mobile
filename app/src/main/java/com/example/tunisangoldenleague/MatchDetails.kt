@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tunisangoldenleague.adapters.EventsAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
@@ -31,7 +32,9 @@ class MatchDetails : AppCompatActivity() {
     lateinit var score: TextView
     lateinit var homeLogo: ImageView
     lateinit var awayLogo: ImageView
-    lateinit var eventsList : RecyclerView
+    lateinit var eventsList: RecyclerView
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,28 +49,51 @@ class MatchDetails : AppCompatActivity() {
         awayTeam = findViewById(R.id.textView9)
         awayLogo = findViewById(R.id.awayLogo)
         eventsList = findViewById(R.id.eventsList)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         val match = intent.getSerializableExtra("match") as Match
         homeLogo.setOnClickListener {
-            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
-            intent.putExtra("team",match.homeTeam)
+            val intent = Intent(this@MatchDetails, TeamDetails::class.java)
+            intent.putExtra("team", match.homeTeam)
             startActivity(intent)
         }
         homeTeam.setOnClickListener {
-            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
-            intent.putExtra("team",match.homeTeam)
+            val intent = Intent(this@MatchDetails, TeamDetails::class.java)
+            intent.putExtra("team", match.homeTeam)
             startActivity(intent)
         }
         awayLogo.setOnClickListener {
-            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
-            intent.putExtra("team",match.awayTeam)
+            val intent = Intent(this@MatchDetails, TeamDetails::class.java)
+            intent.putExtra("team", match.awayTeam)
             startActivity(intent)
         }
         awayTeam.setOnClickListener {
-            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
-            intent.putExtra("team",match.awayTeam)
+            val intent = Intent(this@MatchDetails, TeamDetails::class.java)
+            intent.putExtra("team", match.awayTeam)
             startActivity(intent)
         }
+        title.setText(intent.getStringExtra("title"))
+        date.setText(match.getMatchDate())
+        time.setText(match.getMatchTime())
+        homeTeam.setText(match.homeTeam.name)
+        awayTeam.setText(match.awayTeam.name)
+        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
+        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
+        Picasso.get().load(homeTeamUrl).into(homeLogo)
+        Picasso.get().load(awayTeamUrl).into(awayLogo)
+        init(match)
+        swipeRefreshLayout.setOnRefreshListener {
+            init(match)
+            swipeRefreshLayout.isRefreshing = false
+        }
+        backArrow.setOnClickListener {
+            finish()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun init(match: Match) {
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
+        // get events
         val eventsCall = backendApi.getEventsByMatch(match.id)
         var events: ArrayList<Event>
         eventsCall!!.enqueue(object : Callback<ArrayList<Event>?> {
@@ -82,6 +108,7 @@ class MatchDetails : AppCompatActivity() {
                     eventsList.layoutManager = LinearLayoutManager(this@MatchDetails)
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<Event>?>, t: Throwable) {
                 Toast.makeText(
                     this@MatchDetails,
@@ -91,18 +118,28 @@ class MatchDetails : AppCompatActivity() {
                     .show()
             }
         })
-        title.setText(intent.getStringExtra("title"))
-        date.setText(match.getMatchDate())
-        time.setText(match.getMatchTime())
-        homeTeam.setText(match.homeTeam.name)
-        awayTeam.setText(match.awayTeam.name)
+        // get Match
+        /* val matchCall = backendApi.getMatchById(match.id)
+         var updatedMatch: Match
+         matchCall!!.enqueue(object : Callback<Match> {
+             override fun onResponse(
+                 call: Call<Match>,
+                 response: Response<Match>
+             ) {
+                 if (response.isSuccessful) {
+                     updatedMatch = response.body()!!
+                     score.setText(updatedMatch.getScore())
+                 }
+             }
+             override fun onFailure(call: Call<Match>, t: Throwable) {
+                 Toast.makeText(
+                     this@MatchDetails,
+                     "Problème de connection...",
+                     Toast.LENGTH_SHORT
+                 )
+                     .show()
+             }
+         })*/
         score.setText(match.getScore())
-        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
-        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
-        Picasso.get().load(homeTeamUrl).into(homeLogo)
-        Picasso.get().load(awayTeamUrl).into(awayLogo)
-        backArrow.setOnClickListener {
-            finish()
-        }
     }
 }

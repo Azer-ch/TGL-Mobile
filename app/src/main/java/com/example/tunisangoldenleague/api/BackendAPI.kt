@@ -28,6 +28,10 @@ interface BackendAPI {
 
     @GET("players?")
     fun getPlayersByTeamName(@Query("team") team: String): Call<ArrayList<Player>>
+
     @GET("games")
-    fun getGamesByTeamId(@Query("team") team : String) : Call<GamesDto>
+    fun getGamesByTeamId(@Query("team") team: String): Call<GamesDto>
+
+    @GET("game?")
+    fun getMatchById(@Query("team") team : String) : Call<Match>
 }
