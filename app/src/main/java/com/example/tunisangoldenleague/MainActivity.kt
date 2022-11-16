@@ -15,8 +15,10 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tunisangoldenleague.adapters.MatchesAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
@@ -35,13 +37,34 @@ class MainActivity : AppCompatActivity() {
     lateinit var liveImageView: ImageView
     lateinit var liveTextView: TextView
     lateinit var parentLayout: ConstraintLayout
+    lateinit var liveMatchesContainer: ConstraintLayout
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            init()
+            swipeRefreshLayout.isRefreshing = false
+        }
+        init()
+    }
+
+    fun convertToPx(value: Int): Int {
+        val r = this.resources
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value.toFloat(),
+            r.displayMetrics
+        ).toInt()
+    }
+    fun init() {
         parentLayout = findViewById(R.id.parent)
         liveImageView = findViewById(R.id.imageView)
         liveTextView = findViewById(R.id.textView)
         liveMatchesList = findViewById(R.id.recyclerView)
+        liveMatchesContainer = findViewById(R.id.constraintLayout)
+        var constraintLayouts = ArrayList<ConstraintLayout>()
         // Get Leagues
         var leagues = ArrayList<League>()
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
@@ -53,7 +76,6 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     leagues = response.body()!!
-                    var constraintLayouts = ArrayList<ConstraintLayout>()
                     constraintLayouts.add(findViewById(R.id.constraintLayout))
                     for (i in leagues.indices) {
                         runOnUiThread {
@@ -67,15 +89,19 @@ class MainActivity : AppCompatActivity() {
                                 convertToPx(150)
                             )
                             layoutParam.setMargins(
-                                convertToPx(10), convertToPx(50), convertToPx(10), convertToPx(50)
+                                convertToPx(10), convertToPx(50), convertToPx(10), convertToPx(0)
                             )
                             layout.layoutParams = layoutParam
                             parentLayout.addView(layout)
                             layoutParam = layout.layoutParams as ConstraintLayout.LayoutParams
                             layoutParam.topToBottom = constraintLayouts[i].id
                             layoutParam.endToEnd = parentLayout.id
-                            if (i == leagues.size - 1)
+                            if (i == leagues.size - 1) {
                                 layoutParam.bottomToBottom = parentLayout.id
+                                layoutParam.setMargins(
+                                    convertToPx(10), convertToPx(50), convertToPx(10), convertToPx(10)
+                                )
+                            }
                             layout.requestLayout()
                             // adding title
                             var title = TextView(this@MainActivity)
@@ -200,6 +226,12 @@ class MainActivity : AppCompatActivity() {
                             })
                         }
                     }
+                    if(constraintLayouts[0].visibility == View.INVISIBLE && constraintLayouts.size > 1){
+                        var params =  constraintLayouts[1].layoutParams as LayoutParams
+                        params.topToTop = parentLayout.id
+                        params.startToStart = parentLayout.id
+                        constraintLayouts[1].requestLayout()
+                    }
                 }
             }
 
@@ -230,7 +262,6 @@ class MainActivity : AppCompatActivity() {
                         )
                         liveImageView.setOnClickListener {
                             var intent = Intent(this@MainActivity, LiveMatches::class.java)
-                            intent.putExtra("matches", liveMatches)
                             startActivity(intent)
                         }
                     }
@@ -242,14 +273,5 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         })
-    }
-
-    fun convertToPx(value: Int): Int {
-        val r = this.resources
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value.toFloat(),
-            r.displayMetrics
-        ).toInt()
     }
 }

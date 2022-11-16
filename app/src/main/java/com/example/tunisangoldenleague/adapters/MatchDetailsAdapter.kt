@@ -12,6 +12,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tunisangoldenleague.MatchDetails
 import com.example.tunisangoldenleague.R
+import com.example.tunisangoldenleague.TeamDetails
 import com.example.tunisangoldenleague.model.Match
 import com.squareup.picasso.Picasso
 

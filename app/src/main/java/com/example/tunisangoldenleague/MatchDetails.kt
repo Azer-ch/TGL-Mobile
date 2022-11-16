@@ -47,6 +47,26 @@ class MatchDetails : AppCompatActivity() {
         awayLogo = findViewById(R.id.awayLogo)
         eventsList = findViewById(R.id.eventsList)
         val match = intent.getSerializableExtra("match") as Match
+        homeLogo.setOnClickListener {
+            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
+            intent.putExtra("team",match.homeTeam)
+            startActivity(intent)
+        }
+        homeTeam.setOnClickListener {
+            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
+            intent.putExtra("team",match.homeTeam)
+            startActivity(intent)
+        }
+        awayLogo.setOnClickListener {
+            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
+            intent.putExtra("team",match.awayTeam)
+            startActivity(intent)
+        }
+        awayTeam.setOnClickListener {
+            val intent = Intent(this@MatchDetails,TeamDetails::class.java)
+            intent.putExtra("team",match.awayTeam)
+            startActivity(intent)
+        }
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
         val eventsCall = backendApi.getEventsByMatch(match.id)
         var events = ArrayList<Event>()

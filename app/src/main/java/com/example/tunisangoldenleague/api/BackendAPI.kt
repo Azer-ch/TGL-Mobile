@@ -1,9 +1,7 @@
 package com.example.tunisangoldenleague.api
 
-import com.example.tunisangoldenleague.model.Event
-import com.example.tunisangoldenleague.model.League
-import com.example.tunisangoldenleague.model.Match
-import com.example.tunisangoldenleague.model.Team
+import com.example.tunisangoldenleague.dto.GamesDto
+import com.example.tunisangoldenleague.model.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -11,7 +9,8 @@ import retrofit2.http.Query
 
 interface BackendAPI {
     @GET("leagues")
-    fun  getLeagues(): Call<ArrayList<League>>
+    fun getLeagues(): Call<ArrayList<League>>
+
     @GET("teams?")
     fun getTeamsByLeague(@Query("league") league: String): Call<ArrayList<Team>>
 
@@ -23,6 +22,12 @@ interface BackendAPI {
 
     @GET("live")
     fun getLiveMatches(): Call<ArrayList<Match>>
+
     @GET("comments?")
-    fun getEventsByMatch(@Query("game") game : String) : Call<ArrayList<Event>>
+    fun getEventsByMatch(@Query("game") game: String): Call<ArrayList<Event>>
+
+    @GET("players?")
+    fun getPlayersByTeamName(@Query("team") team: String): Call<ArrayList<Player>>
+    @GET("games")
+    fun getGamesByTeamId(@Query("team") team : String) : Call<GamesDto>
 }
