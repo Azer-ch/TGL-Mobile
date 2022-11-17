@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 data class Match(
-    var id : String,
+    var id: String,
     var homeTeam: Team,
     var awayTeam: Team,
     var homeTeamScore: Int,
@@ -21,8 +21,14 @@ data class Match(
     var startDate: String,
     var endDate: String
 ) : Serializable {
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getScore(): String {
-        return "$homeTeamScore - $awayTeamScore"
+        val zoneId = ZoneId.of("Africa/Tunis")
+        val now = ZonedDateTime.now(zoneId)
+        if (parseString(startDate) > now)
+            return "- : -"
+        else
+            return "$homeTeamScore - $awayTeamScore"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -32,7 +38,12 @@ data class Match(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMatchDate(): String {
-        return "${parseString(startDate)?.dayOfMonth} ${parseString(startDate)?.month?.getDisplayName(TextStyle.FULL,Locale.FRANCE)} ${parseString(startDate)?.year}"
+        return "${parseString(startDate)?.dayOfMonth} ${
+            parseString(startDate)?.month?.getDisplayName(
+                TextStyle.FULL,
+                Locale.FRANCE
+            )
+        } ${parseString(startDate)?.year}"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -48,9 +59,14 @@ data class Match(
         if (parseString(endDate) < now)
             return "Match Terminé"
         else {
-            val duration = Duration.between(parseString(startDate),now)
+            val duration = Duration.between(parseString(startDate), now)
             return "Temps Écoulé : ${duration.toMinutes().toString()} Minutes"
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getMatchDateV2(): String {
+        return "${parseString(startDate).dayOfMonth}/${parseString(startDate).monthValue}/${parseString(startDate).year}"
     }
 }
 

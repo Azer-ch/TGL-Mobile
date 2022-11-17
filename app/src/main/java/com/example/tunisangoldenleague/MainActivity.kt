@@ -31,6 +31,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 class MainActivity : AppCompatActivity() {
@@ -174,6 +176,7 @@ class MainActivity : AppCompatActivity() {
                             var matches = ArrayList<Match>()
                             var matchesCall = backendApi.getMatchesByLeague(leagues[i].name)
                             matchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
+                                @RequiresApi(Build.VERSION_CODES.O)
                                 override fun onResponse(
                                     call: Call<ArrayList<Match>?>,
                                     response: Response<ArrayList<Match>?>
@@ -181,6 +184,22 @@ class MainActivity : AppCompatActivity() {
                                     if (response.isSuccessful) {
                                         matches = response.body()!!
                                         if (!matches.isEmpty()) {
+                                            var temp = ArrayList<Match>()
+                                            matches.forEach { match ->
+                                                val zoneId = ZoneId.of("Africa/Tunis")
+                                                val now = ZonedDateTime.now(zoneId)
+                                                if (match.parseString(match.startDate) > now || match.parseString(
+                                                        match.endDate
+                                                    ) < now
+                                                )
+                                                    temp.add(match)
+                                            }
+                                            matches = temp
+                                            matches.sortByDescending { match ->
+                                                match.parseString(
+                                                    match.startDate
+                                                )
+                                            }
                                             noMatchesTextView.visibility = View.INVISIBLE
                                             recyclerView.visibility = View.VISIBLE
                                             var matchesAdapter = MatchesAdapter(matches)
