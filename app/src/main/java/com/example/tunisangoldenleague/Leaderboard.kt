@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tunisangoldenleague.adapters.MatchDetailsAdapter
 import com.example.tunisangoldenleague.adapters.MatchesAdapter
+import com.example.tunisangoldenleague.adapters.PlayerDtoDetailsAdapter
 import com.example.tunisangoldenleague.adapters.TeamsAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
+import com.example.tunisangoldenleague.comparator.TeamsComparator
+import com.example.tunisangoldenleague.dto.PlayerDto
 import com.example.tunisangoldenleague.model.League
 import com.example.tunisangoldenleague.model.Match
 import com.example.tunisangoldenleague.model.Team
@@ -24,6 +27,7 @@ import retrofit2.Response
 class Leaderboard : AppCompatActivity() {
     lateinit var backArrow: ImageView
     lateinit var leaderboardRecyclerView: RecyclerView
+    lateinit var playersRecyclerView: RecyclerView
     lateinit var matchDetailsRecyclerView: RecyclerView
     lateinit var textView: TextView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -61,7 +65,8 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     teams = response.body()!!
-                    var teamsAdapter = TeamsAdapter(teams)
+                    teams.sortWith(TeamsComparator)
+                    val teamsAdapter = TeamsAdapter(teams)
                     leaderboardRecyclerView = findViewById(R.id.recyclerView)
                     leaderboardRecyclerView.adapter = teamsAdapter
                     leaderboardRecyclerView.layoutManager = LinearLayoutManager(this@Leaderboard)
@@ -95,6 +100,33 @@ class Leaderboard : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<Match>?>, t: Throwable) {
+                Toast.makeText(
+                    this@Leaderboard,
+                    "Problème de connection...",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        })
+        // players creation
+        var players = ArrayList<PlayerDto>()
+        var playersCall = backendApi.getPlayersByLeague(league)
+        playersCall!!.enqueue(object : Callback<ArrayList<PlayerDto>?> {
+            override fun onResponse(
+                call: Call<ArrayList<PlayerDto>?>,
+                response: Response<ArrayList<PlayerDto>?>
+            ) {
+                if (response.isSuccessful) {
+                    players = response.body()!!
+                    players.sortByDescending { playerDto -> playerDto.buts }
+                    val playersAdapter = PlayerDtoDetailsAdapter(players)
+                    playersRecyclerView = findViewById(R.id.recyclerView3)
+                    playersRecyclerView.adapter = playersAdapter
+                    playersRecyclerView.layoutManager = LinearLayoutManager(this@Leaderboard)
+                }
+            }
+
+            override fun onFailure(call: Call<ArrayList<PlayerDto>?>, t: Throwable) {
                 Toast.makeText(
                     this@Leaderboard,
                     "Problème de connection...",

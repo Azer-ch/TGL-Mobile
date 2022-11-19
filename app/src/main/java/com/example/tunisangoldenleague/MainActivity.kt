@@ -182,16 +182,12 @@ class MainActivity : AppCompatActivity() {
                                     response: Response<ArrayList<Match>?>
                                 ) {
                                     if (response.isSuccessful) {
+                                        Log.d("azer", response.body().toString())
                                         matches = response.body()!!
                                         if (!matches.isEmpty()) {
                                             var temp = ArrayList<Match>()
                                             matches.forEach { match ->
-                                                val zoneId = ZoneId.of("Africa/Tunis")
-                                                val now = ZonedDateTime.now(zoneId)
-                                                if (match.parseString(match.startDate) > now || match.parseString(
-                                                        match.endDate
-                                                    ) < now
-                                                )
+                                                if(!match.live)
                                                     temp.add(match)
                                             }
                                             matches = temp
@@ -238,7 +234,6 @@ class MainActivity : AppCompatActivity() {
                                 ) {
                                     if (response.isSuccessful) {
                                         teams = response.body()!!
-                                        teams.sortByDescending { team -> team.points }
                                         if (teams.size > 0) {
                                             title.setOnClickListener {
                                                 var intent =
@@ -247,8 +242,6 @@ class MainActivity : AppCompatActivity() {
                                                         Leaderboard::class.java
                                                     )
                                                 intent.putExtra("title", leagues[i].name)
-                                                intent.putExtra("teams", teams)
-                                                intent.putExtra("matches", matches)
                                                 startActivity(intent)
                                             }
                                         }

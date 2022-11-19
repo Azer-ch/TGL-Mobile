@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tunisangoldenleague.MatchDetails
 import com.example.tunisangoldenleague.R
 import com.example.tunisangoldenleague.TeamDetails
 import com.example.tunisangoldenleague.model.Team
@@ -19,11 +18,12 @@ class TeamsAdapter(var teams: ArrayList<Team>) :
         val logo : ImageView = itemView.findViewById(R.id.imageView)
         val name: TextView = itemView.findViewById(R.id.textView10)
         val mj: TextView = itemView.findViewById(R.id.textView11)
-        val gagnes: TextView = itemView.findViewById(R.id.textView12)
-        val nuls: TextView = itemView.findViewById(R.id.textView13)
+        val gagnes: TextView = itemView.findViewById(R.id.ImageView12)
+        val nuls: TextView = itemView.findViewById(R.id.ImageView13)
         val perdus: TextView = itemView.findViewById(R.id.textView14)
         val buts_marques: TextView = itemView.findViewById(R.id.textView15)
         val buts_encaisses: TextView = itemView.findViewById(R.id.textView16)
+        val buts_differences : TextView = itemView.findViewById(R.id.textView18)
         val points: TextView = itemView.findViewById(R.id.textView17)
     }
 
@@ -47,8 +47,9 @@ class TeamsAdapter(var teams: ArrayList<Team>) :
         val mp = viewHolder.perdus
         val bp = viewHolder.buts_marques
         val bc = viewHolder.buts_encaisses
+        val bd = viewHolder.buts_differences
         val points = viewHolder.points
-        var logoUrl = "http://tgl.westeurope.cloudapp.azure.com${team.image}"
+        var logoUrl = "http://tgl2.westeurope.cloudapp.azure.com/${team.image}"
         Picasso.get().load(logoUrl).into(logo)
         name.setText(team.name)
         var totalMatches :Int = team.nulles + team.pertes + team.victoires
@@ -58,6 +59,7 @@ class TeamsAdapter(var teams: ArrayList<Team>) :
         mp.setText(team.pertes.toString())
         bp.setText(team.buts_marque.toString())
         bc.setText(team.buts_encaisse.toString())
+        bd.setText((team.buts_marque-team.buts_encaisse).toString())
         points.setText(team.points.toString())
         viewHolder.itemView.setOnClickListener{
             val intent = Intent(viewHolder.itemView.context, TeamDetails::class.java)

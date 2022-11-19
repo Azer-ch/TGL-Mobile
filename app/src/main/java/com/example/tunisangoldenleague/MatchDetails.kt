@@ -78,8 +78,8 @@ class MatchDetails : AppCompatActivity() {
         homeTeam.setText(match.homeTeam.name)
         awayTeam.setText(match.awayTeam.name)
         score.setText(match.getScore())
-        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
-        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
+        var homeTeamUrl = "http://tgl2.westeurope.cloudapp.azure.com${match.homeTeam.image}"
+        var awayTeamUrl = "http://tgl2.westeurope.cloudapp.azure.com${match.awayTeam.image}"
         Picasso.get().load(homeTeamUrl).into(homeLogo)
         Picasso.get().load(awayTeamUrl).into(awayLogo)
         init(match)

@@ -62,9 +62,9 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="40dp"
                 android:background="@drawable/golden_layout_bg"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -74,23 +74,46 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:text="Joueur"
+                    android:gravity="center"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/ImageView12"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/ImageView12"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:src="@drawable/yellow_card"
+                    app:layout_constraintStart_toEndOf="@id/textView10"
+                    app:layout_constraintEnd_toStartOf="@id/ImageView13"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+                <ImageView
+                    android:id="@+id/ImageView13"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/red_card"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    app:layout_constraintStart_toEndOf="@id/ImageView12"
+                    app:layout_constraintEnd_toStartOf="@id/textView11"
+                    app:layout_constraintTop_toTopOf="parent" />
                 <TextView
                     android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
                     android:text="Buts"
                     android:textColor="@color/black"
+                    app:layout_constraintStart_toEndOf="@id/ImageView13"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

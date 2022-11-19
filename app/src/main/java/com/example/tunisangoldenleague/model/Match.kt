@@ -19,7 +19,8 @@ data class Match(
     var homeTeamScore: Int,
     var awayTeamScore: Int,
     var startDate: String,
-    var endDate: String
+    var endDate: String,
+    var live : Boolean
 ) : Serializable {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getScore(): String {
@@ -56,11 +57,11 @@ data class Match(
     fun getElapsedTime(): String {
         val zoneId = ZoneId.of("Africa/Tunis")
         val now = ZonedDateTime.now(zoneId)
-        if (parseString(endDate) < now)
+        if (!live)
             return "Match Terminé"
         else {
             val duration = Duration.between(parseString(startDate), now)
-            return "Temps Écoulé : ${duration.toMinutes().toString()} Minutes"
+            return "Temps Écoulé : ${duration.toMinutes()} Minutes"
         }
     }
 

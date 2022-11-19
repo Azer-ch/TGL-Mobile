@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 object RetrofitHelper {
-    val baseUrl = "http://tgl.westeurope.cloudapp.azure.com/"
+    val baseUrl = "http://tgl2.westeurope.cloudapp.azure.com/"
     fun getInstance(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())

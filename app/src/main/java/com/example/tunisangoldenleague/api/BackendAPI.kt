@@ -1,6 +1,7 @@
 package com.example.tunisangoldenleague.api
 
 import com.example.tunisangoldenleague.dto.GamesDto
+import com.example.tunisangoldenleague.dto.PlayerDto
 import com.example.tunisangoldenleague.model.*
 import retrofit2.Call
 import retrofit2.Response
@@ -33,5 +34,8 @@ interface BackendAPI {
     fun getGamesByTeamId(@Query("team") team: String): Call<GamesDto>
 
     @GET("game")
-    fun getMatchById(@Query("game") team : String) : Call<Match>
+    fun getMatchById(@Query("game") team: String): Call<Match>
+
+    @GET("players")
+    fun getPlayersByLeague(@Query("league") league: String): Call<ArrayList<PlayerDto>>
 }

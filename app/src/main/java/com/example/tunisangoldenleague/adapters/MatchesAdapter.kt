@@ -57,14 +57,14 @@ class MatchesAdapter(var matches: ArrayList<Match>) :
         score.setText(match.getScore())
         val zoneId = ZoneId.of("Africa/Tunis")
         val now = ZonedDateTime.now(zoneId)
-        if(match.parseString(match.startDate) <= now && match.parseString(match.endDate) >= now)
+        if(match.live)
             date.visibility = View.INVISIBLE
         else {
             date.visibility = View.VISIBLE
             date.setText("${match.getMatchDateV2()} ${match.getMatchTime()}")
         }
-        var homeTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.homeTeam.image}"
-        var awayTeamUrl = "http://tgl.westeurope.cloudapp.azure.com${match.awayTeam.image}"
+        var homeTeamUrl = "http://tgl2.westeurope.cloudapp.azure.com${match.homeTeam.image}"
+        var awayTeamUrl = "http://tgl2.westeurope.cloudapp.azure.com${match.awayTeam.image}"
         Picasso.get().load(homeTeamUrl).into(homeTeamLogo)
         Picasso.get().load(awayTeamUrl).into(awayTeamLogo)
         viewHolder.itemView.setOnClickListener{

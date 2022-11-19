@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeRefreshLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -14,7 +14,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:context=".MatchDetails">
 
             <ImageView
@@ -48,6 +48,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="48dp"
                 android:text="Classement"
+                android:background="@color/black"
                 android:textColor="@color/white"
                 android:textFontWeight="900"
                 android:textSize="20sp"
@@ -74,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    android:layout_width="150dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
@@ -92,44 +93,44 @@
                     android:gravity="center"
                     android:text="MJ"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toStartOf="@id/textView12"
+                    app:layout_constraintEnd_toStartOf="@id/ImageView12"
                     app:layout_constraintStart_toEndOf="@id/textView10"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="20dp"
+                    android:id="@+id/ImageView12"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:text="G"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toStartOf="@id/textView13"
+                    app:layout_constraintEnd_toStartOf="@id/ImageView13"
                     app:layout_constraintStart_toEndOf="@id/textView11"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="20dp"
+                    android:id="@+id/ImageView13"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:text="N"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toStartOf="@id/textView14"
-                    app:layout_constraintStart_toEndOf="@id/textView12"
+                    app:layout_constraintStart_toEndOf="@id/ImageView12"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="20dp"
+                    android:layout_width="15dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:text="P"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toStartOf="@id/textView15"
-                    app:layout_constraintStart_toEndOf="@id/textView13"
+                    app:layout_constraintStart_toEndOf="@id/ImageView13"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -152,8 +153,20 @@
                     android:gravity="center"
                     android:text="BC"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toStartOf="@id/textView17"
+                    app:layout_constraintEnd_toStartOf="@id/textView18"
                     app:layout_constraintStart_toEndOf="@id/textView15"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView18"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="BD"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toStartOf="@id/textView17"
+                    app:layout_constraintStart_toEndOf="@id/textView16"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -183,6 +196,85 @@
                     app:layout_constraintVertical_bias="0.152" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="48dp"
+                android:text="Meilleurs Buteurs"
+                android:textColor="@color/white"
+                android:background="@color/black"
+                android:textFontWeight="900"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintVertical_bias="0.5" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/golden_layout_bg"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView30">
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Equipe"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toStartOf="@id/textView21"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/constraintLayout2" />
+
+                <TextView
+                    android:id="@+id/textView21"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Joueur"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toStartOf="@id/textView22"
+                    app:layout_constraintStart_toEndOf="@id/textView20"
+                    app:layout_constraintTop_toTopOf="@id/constraintLayout2" />
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="Buts"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/textView21"
+                    app:layout_constraintTop_toTopOf="@id/constraintLayout2" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView20"
+                    app:layout_constraintVertical_bias="0.152" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
@@ -192,7 +284,7 @@
                 android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
