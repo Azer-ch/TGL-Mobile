@@ -67,7 +67,11 @@ data class Match(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMatchDateV2(): String {
-        return "${parseString(startDate).dayOfMonth}/${parseString(startDate).monthValue}/${parseString(startDate).year}"
+        val month = parseString(startDate).monthValue
+        var stringMonth = month.toString()
+        if(month < 10)
+            stringMonth="0$month"
+        return "${parseString(startDate).dayOfMonth}/${stringMonth}/${parseString(startDate).year}"
     }
 }
 

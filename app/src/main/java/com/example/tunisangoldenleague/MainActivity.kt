@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tunisangoldenleague.adapters.MatchesAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
+import com.example.tunisangoldenleague.comparator.MatchesDatesComparator
 import com.example.tunisangoldenleague.model.League
 import com.example.tunisangoldenleague.model.Match
 import com.example.tunisangoldenleague.model.Team
@@ -191,11 +192,7 @@ class MainActivity : AppCompatActivity() {
                                                     temp.add(match)
                                             }
                                             matches = temp
-                                            matches.sortByDescending { match ->
-                                                match.parseString(
-                                                    match.startDate
-                                                )
-                                            }
+                                            matches.sortWith(MatchesDatesComparator)
                                             noMatchesTextView.visibility = View.INVISIBLE
                                             recyclerView.visibility = View.VISIBLE
                                             var matchesAdapter = MatchesAdapter(matches)

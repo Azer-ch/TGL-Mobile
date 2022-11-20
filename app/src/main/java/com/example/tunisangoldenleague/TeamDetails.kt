@@ -17,6 +17,7 @@ import com.example.tunisangoldenleague.adapters.PlayersAdapter
 import com.example.tunisangoldenleague.adapters.TeamsAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
+import com.example.tunisangoldenleague.comparator.MatchesDatesComparator
 import com.example.tunisangoldenleague.dto.GamesDto
 import com.example.tunisangoldenleague.model.Match
 import com.example.tunisangoldenleague.model.Player
@@ -84,7 +85,9 @@ class TeamDetails : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     gamesDto = response.body()!!
-                    var matchAdapter = MatchDetailsAdapter(gamesDto.getAllMatches())
+                    val matches = gamesDto.getAllMatches()
+                    matches.sortWith(MatchesDatesComparator)
+                    val matchAdapter = MatchDetailsAdapter(matches)
                     matchDetailsRecyclerView.adapter = matchAdapter
                     matchDetailsRecyclerView.layoutManager = LinearLayoutManager(this@TeamDetails)
                 }

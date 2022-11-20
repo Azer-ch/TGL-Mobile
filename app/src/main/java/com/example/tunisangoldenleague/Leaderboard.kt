@@ -18,6 +18,7 @@ import com.example.tunisangoldenleague.adapters.PlayerDtoDetailsAdapter
 import com.example.tunisangoldenleague.adapters.TeamsAdapter
 import com.example.tunisangoldenleague.api.BackendAPI
 import com.example.tunisangoldenleague.api.RetrofitHelper
+import com.example.tunisangoldenleague.comparator.MatchesDatesComparator
 import com.example.tunisangoldenleague.comparator.TeamsComparator
 import com.example.tunisangoldenleague.dto.PlayerDto
 import com.example.tunisangoldenleague.model.League
@@ -100,6 +101,7 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     matches = response.body()!!
+                    matches.sortWith(MatchesDatesComparator)
                     val matchAdapter = MatchDetailsAdapter(matches)
                     matchDetailsRecyclerView.adapter = matchAdapter
                     matchDetailsRecyclerView.layoutManager = LinearLayoutManager(this@Leaderboard)
