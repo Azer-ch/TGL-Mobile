@@ -3,9 +3,12 @@ package com.example.tunisangoldenleague
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -31,6 +34,10 @@ class Leaderboard : AppCompatActivity() {
     lateinit var matchDetailsRecyclerView: RecyclerView
     lateinit var textView: TextView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    lateinit var topStrikers : TextView
+    lateinit var teamsDiv : ConstraintLayout
+    lateinit var topStrikersDiv : ConstraintLayout
+    lateinit var parent : ConstraintLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
@@ -83,6 +90,7 @@ class Leaderboard : AppCompatActivity() {
             }
         })
         // matches creation
+        matchDetailsRecyclerView = findViewById(R.id.recyclerView2)
         var matches = ArrayList<Match>()
         var matchesCall = backendApi.getMatchesByLeague(league)
         matchesCall!!.enqueue(object : Callback<ArrayList<Match>?> {
@@ -92,8 +100,7 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     matches = response.body()!!
-                    var matchAdapter = MatchDetailsAdapter(matches)
-                    matchDetailsRecyclerView = findViewById(R.id.recyclerView2)
+                    val matchAdapter = MatchDetailsAdapter(matches)
                     matchDetailsRecyclerView.adapter = matchAdapter
                     matchDetailsRecyclerView.layoutManager = LinearLayoutManager(this@Leaderboard)
                 }
@@ -111,6 +118,11 @@ class Leaderboard : AppCompatActivity() {
         // players creation
         var players = ArrayList<PlayerDto>()
         var playersCall = backendApi.getPlayersByLeague(league)
+        topStrikers = findViewById(R.id.textView30)
+        topStrikersDiv = findViewById(R.id.constraintLayout2)
+        teamsDiv = findViewById(R.id.constraintLayout)
+        parent = findViewById(R.id.parent)
+        var layoutParam = matchDetailsRecyclerView.layoutParams as ConstraintLayout.LayoutParams
         playersCall!!.enqueue(object : Callback<ArrayList<PlayerDto>?> {
             override fun onResponse(
                 call: Call<ArrayList<PlayerDto>?>,
@@ -118,6 +130,22 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     players = response.body()!!
+                    if(players.isNotEmpty()) {
+                        layoutParam.topToBottom = topStrikersDiv.id
+                        layoutParam.startToStart = parent.id
+                        layoutParam.bottomToBottom = parent.id
+                        matchDetailsRecyclerView.requestLayout()
+                        topStrikers.visibility = View.VISIBLE
+                        topStrikersDiv.visibility = View.VISIBLE
+                    }
+                    else{
+                        layoutParam.topToBottom = teamsDiv.id
+                        layoutParam.startToStart = parent.id
+                        layoutParam.bottomToBottom = parent.id
+                        matchDetailsRecyclerView.requestLayout()
+                        topStrikers.visibility = View.INVISIBLE
+                        topStrikersDiv.visibility = View.INVISIBLE
+                    }
                     players.sortByDescending { playerDto -> playerDto.buts }
                     val playersAdapter = PlayerDtoDetailsAdapter(players)
                     playersRecyclerView = findViewById(R.id.recyclerView3)
@@ -127,6 +155,12 @@ class Leaderboard : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ArrayList<PlayerDto>?>, t: Throwable) {
+                layoutParam.topToBottom = teamsDiv.id
+                layoutParam.startToStart = parent.id
+                layoutParam.bottomToBottom = parent.id
+                matchDetailsRecyclerView.requestLayout()
+                topStrikers.visibility = View.INVISIBLE
+                topStrikersDiv.visibility = View.INVISIBLE
                 Toast.makeText(
                     this@Leaderboard,
                     "Problème de connection...",

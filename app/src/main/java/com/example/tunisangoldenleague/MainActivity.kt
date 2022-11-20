@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                                 this@MainActivity.resources.getDrawable(R.drawable.layout_bg)
                             var layoutParam = ConstraintLayout.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
-                                convertToPx(150)
+                                ViewGroup.LayoutParams.WRAP_CONTENT
                             )
                             layoutParam.setMargins(
                                 convertToPx(10), convertToPx(50), convertToPx(10), convertToPx(0)

@@ -49,7 +49,7 @@ data class Match(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getMatchTime(): String {
-        return parseString(startDate)?.toLocalTime().toString().substringBeforeLast(":")
+        return parseString(startDate).toLocalTime().toString()
 
     }
 
