@@ -35,6 +35,7 @@ class TeamDetails : AppCompatActivity() {
     lateinit var equipe: TextView
     lateinit var playersDiv: ConstraintLayout
     lateinit var parent: ConstraintLayout
+    lateinit var message : TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_details)
@@ -45,6 +46,7 @@ class TeamDetails : AppCompatActivity() {
         equipe = findViewById(R.id.textView5)
         playersDiv = findViewById(R.id.constraintLayout)
         parent = findViewById(R.id.parent)
+        message = findViewById<TextView>(R.id.message)
         var team = intent.getSerializableExtra("team") as Team
         textView.setText(team.name)
         init(team)
@@ -60,9 +62,10 @@ class TeamDetails : AppCompatActivity() {
 
     fun init(team: Team) {
         val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
+        var matches = ArrayList<Match>()
         // players list
         var layoutParam = matchDetailsRecyclerView.layoutParams as ConstraintLayout.LayoutParams
-        var players: ArrayList<Player>
+        var players =  ArrayList<Player>()
         var playersCall = backendApi.getPlayersByTeamName(team.name)
         playersCall!!.enqueue(object : Callback<ArrayList<Player>?> {
             override fun onResponse(
@@ -75,10 +78,13 @@ class TeamDetails : AppCompatActivity() {
                         layoutParam.topToBottom = playersDiv.id
                         layoutParam.startToStart = parent.id
                         layoutParam.bottomToBottom = parent.id
+                        message.visibility = View.INVISIBLE
                         matchDetailsRecyclerView.requestLayout()
                         equipe.visibility = View.VISIBLE
                         playersDiv.visibility = View.VISIBLE
                     } else {
+                        if(matches.isEmpty())
+                            message.visibility = View.VISIBLE
                         layoutParam.topToBottom = backArrow.id
                         layoutParam.startToStart = parent.id
                         layoutParam.bottomToBottom = parent.id
@@ -97,6 +103,7 @@ class TeamDetails : AppCompatActivity() {
                 layoutParam.topToBottom = backArrow.id
                 layoutParam.startToStart = parent.id
                 layoutParam.bottomToBottom = parent.id
+                message.visibility = View.VISIBLE
                 matchDetailsRecyclerView.requestLayout()
                 equipe.visibility = View.INVISIBLE
                 playersDiv.visibility = View.INVISIBLE
@@ -114,7 +121,13 @@ class TeamDetails : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     gamesDto = response.body()!!
-                    val matches = gamesDto.getAllMatches()
+                    matches = gamesDto.getAllMatches()
+                    if(matches.isNotEmpty())
+                        message.visibility = View.INVISIBLE
+                    else{
+                        if(players.isEmpty())
+                            message.visibility = View.VISIBLE
+                    }
                     matches.sortWith(MatchesDatesComparator)
                     val matchAdapter = MatchDetailsAdapter(matches)
                     matchDetailsRecyclerView.adapter = matchAdapter
@@ -123,6 +136,8 @@ class TeamDetails : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<GamesDto>, t: Throwable) {
+                if(matches.isEmpty() && players.isEmpty())
+                    message.visibility = View.VISIBLE
                 Toast.makeText(this@TeamDetails, "Problème de connection...", Toast.LENGTH_SHORT)
                     .show()
             }
