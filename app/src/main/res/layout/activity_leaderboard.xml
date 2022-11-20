@@ -40,6 +40,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/backArrow"
                 app:layout_constraintStart_toEndOf="@+id/backArrow"
                 app:layout_constraintTop_toTopOf="@id/backArrow"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintVertical_bias="0.5" />
 
             <TextView
