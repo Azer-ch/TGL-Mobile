@@ -74,6 +74,8 @@ class TeamDetails : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     players = response.body()!!
+                    players.add(Player("1","2","azer",30,30,30))
+                    players.add(Player("1","2","azer chabbar",30,30,30))
                     if (players.isNotEmpty()) {
                         layoutParam.topToBottom = playersDiv.id
                         layoutParam.startToStart = parent.id

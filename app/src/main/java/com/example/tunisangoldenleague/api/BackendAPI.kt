@@ -38,4 +38,7 @@ interface BackendAPI {
 
     @GET("players")
     fun getPlayersByLeague(@Query("league") league: String): Call<ArrayList<PlayerDto>>
+
+    @GET("config/incrementCounter")
+    fun getConnectedUsers(): Call<Int>
 }

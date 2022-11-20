@@ -132,6 +132,9 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     players = response.body()!!
+                    players.add(PlayerDto("azer",12,"azer","/static/ad47e224381d4932820e56fd10247449.jpg"))
+                    players.add(PlayerDto("azer",12,"azer chabbar","/static/ad47e224381d4932820e56fd10247449.jpg"))
+                    players.add(PlayerDto("azer chabbar",12,"azer chabbar","/static/ad47e224381d4932820e56fd10247449.jpg"))
                     if(players.isNotEmpty()) {
                         layoutParam.topToBottom = topStrikersDiv.id
                         layoutParam.startToStart = parent.id

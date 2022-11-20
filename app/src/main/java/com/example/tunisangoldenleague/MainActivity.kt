@@ -34,6 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.UUID
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +56,21 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             init()
             swipeRefreshLayout.isRefreshing = false
+        }
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        if(sharedPref.getString("user","").isNullOrBlank()){
+            with(sharedPref.edit()){
+                putString("user",UUID.randomUUID().toString())
+                apply()
+            }
+            val backendApi = RetrofitHelper.getInstance().create(BackendAPI::class.java)
+            val connectedUsers = backendApi.getConnectedUsers()
+            connectedUsers.enqueue(object : Callback<Int>{
+                override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                }
+                override fun onFailure(call: Call<Int>, t: Throwable) {
+                }
+            })
         }
         init()
     }
@@ -188,7 +204,7 @@ class MainActivity : AppCompatActivity() {
                                         if (!matches.isEmpty()) {
                                             var temp = ArrayList<Match>()
                                             matches.forEach { match ->
-                                                if(!match.live)
+                                                if (!match.live)
                                                     temp.add(match)
                                             }
                                             matches = temp
