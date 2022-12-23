@@ -4,23 +4,34 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/home/bb/github/Tunisian-Golden-League/sign-key.jks')
+            storePassword 'samirsp6'
+            keyAlias 'key0'
+            keyPassword 'samirsp6'
+        }
+    }
     namespace 'com.example.tunisangoldenleague'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.tunisangoldenleague"
+        applicationId 'com.tgl.tunisangoldenleague'
         minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
